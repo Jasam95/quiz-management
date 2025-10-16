@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<body>
+<!-- admin sidebar fragment -->
+<div th:fragment="sidebar" class="bg-dark text-white p-3 vh-100" style="width: 240px;"
+     sec:authorize="hasRole('ADMIN')">
+  <h4 class="text-center mb-3">🛠 Admin Panel</h4>
+  <hr class="bg-light">
+
+  <ul class="nav flex-column">
+
+    <li class="nav-item mb-2">
+      <a class="nav-link text-white" th:href="@{/profile}">👤 Profile</a>
+    </li>
+
+    <li class="nav-item mb-2">
+      <a class="nav-link text-white" th:href="@{/admin/quiz}">📝 Manage Quizzes</a>
+    </li>
+
+    <li class="nav-item mb-2">
+      <a class="nav-link text-white" th:href="@{/admin/questions}">❓ Manage Questions</a>
+    </li>
+
+    <li class="nav-item mb-2">
+      <a class="nav-link text-white" th:href="@{/admin/participants}">🎓 Manage Participant</a>
+    </li>
+
+    <li class="nav-item mb-2">
+      <a class="nav-link text-white" th:href="@{/admin/marks}">✅ All participant Marks</a>
+    </li>
+
+    <li class="nav-item mt-3">
+      <a class="nav-link text-white fw-bold" th:href="@{/logout}">🚪 Logout</a>
+    </li>
+  </ul>
+</div>
+
+<!-- Participant Sidebar fragment -->
+<div th:fragment="sidebar" class="bg-dark text-white p-3 vh-100" style="width: 240px;"
+     sec:authorize="hasRole('PARTICIPANT')">
+  <h4 class="text-center mb-3">🎓 My Account</h4>
+  <hr class="bg-light">
+
+  <ul class="nav flex-column">
+
+    <li class="nav-item mb-2">
+      <a class="nav-link text-white" th:href="@{/profile}">👤 Profile</a>
+    </li>
+
+    <li class="nav-item mb-2">
+      <a class="nav-link text-white" th:href="@{/participants/quizzes}">🧩 Available Quiz</a>
+    </li>
+
+    <li class="nav-item mb-2">
+      <a class="nav-link text-white" th:href="@{/participants/marks}">📄 My Scores</a>
+    </li>
+
+    <li class="nav-item mt-3">
+      <a class="nav-link text-white fw-bold" th:href="@{/logout}">🚪 Logout</a>
+    </li>
+  </ul>
+</div>
+
+<!-- Layout fragment with sidebar + dynamic content -->
+<div th:fragment="layout(content)">
+  <div class="row">
+    <!-- Sidebar -->
+    <div class="col-2">
+      <div th:replace="~{fragments/sidebar :: sidebar}"></div>
+    </div>
+
+    <!-- Page-specific content -->
+    <div class="col-10 p-4">
+      <div th:insert="${content}"></div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
+
+
