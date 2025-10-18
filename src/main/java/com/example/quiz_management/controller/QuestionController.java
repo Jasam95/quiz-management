@@ -2,22 +2,18 @@ package com.example.quiz_management.controller;
 import com.example.quiz_management.entity.*;
 import com.example.quiz_management.repository.*;
 import com.example.quiz_management.service.QuestionService;
-import com.example.quiz_management.service.QuizService;
 import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 @Controller
 @AllArgsConstructor
-//@RequestMapping("/admin/questions")
 public class QuestionController {
 
     private QuestionService questionService;

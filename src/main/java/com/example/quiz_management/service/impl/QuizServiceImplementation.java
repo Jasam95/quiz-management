@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -23,12 +22,12 @@ public class QuizServiceImplementation implements QuizService {
 
 
     @Override
-    public Quiz saveQuiz(Quiz quiz) {
-        return quizRepository.save(quiz);
+    public void saveQuiz(Quiz quiz) {
+        quizRepository.save(quiz);
     }
 
     @Override
-    public Quiz updateQuiz(Long id, Quiz updatedQuiz) {
+    public void updateQuiz(Long id, Quiz updatedQuiz) {
         Quiz existingQuiz= quizRepository.findById(id)
                 .orElseThrow(()->new RuntimeException("Quiz not found"));
 
@@ -39,8 +38,8 @@ public class QuizServiceImplementation implements QuizService {
             existingQuiz.setPassingScore(updatedQuiz.getPassingScore());
             existingQuiz.setMaxAttempts(updatedQuiz.getMaxAttempts());
             existingQuiz.setCreatedAt(LocalDateTime.now());
-            return quizRepository.save(existingQuiz);
-        }
+        quizRepository.save(existingQuiz);
+    }
 
 
     @Override
