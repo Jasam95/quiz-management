@@ -1,23 +1,14 @@
-package com.example.quiz_management.entity;
+package com.example.quiz_management.dto;
 
+import com.example.quiz_management.entity.Choice;
+import com.example.quiz_management.entity.Quiz;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.*;
+
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Entity
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-
-@Table(name = "questions")
-public class Question {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class QuestionDto {
 
     @NotNull(message = "Question is required")
     @Column(columnDefinition = "TEXT", nullable = false)

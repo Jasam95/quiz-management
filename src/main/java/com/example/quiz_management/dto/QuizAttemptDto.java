@@ -1,23 +1,15 @@
-package com.example.quiz_management.entity;
+package com.example.quiz_management.dto;
 
+import com.example.quiz_management.entity.Quiz;
+import com.example.quiz_management.entity.User;
+import com.example.quiz_management.entity.UserAnswer;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
-import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
+
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Entity
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@Table(name = "quiz_attempts")
-public class QuizAttempt {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class QuizAttemptDto {
 
     @ManyToOne
     @JoinColumn(name = "quiz_id")
@@ -44,8 +36,4 @@ public class QuizAttempt {
 
     @OneToMany(mappedBy = "quizAttempt", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<UserAnswer> userAnswers;
-
-
-
 }
-

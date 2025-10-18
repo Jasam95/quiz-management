@@ -13,4 +13,7 @@ public interface QuizService {
     void deleteQuiz(Long id);
 
     long count();
+
+    List<Quiz> findAll();
+
 }

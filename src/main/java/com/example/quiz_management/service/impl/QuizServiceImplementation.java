@@ -23,12 +23,6 @@ public class QuizServiceImplementation implements QuizService {
 
 
     @Override
-    public Quiz getQuizById(Long id) {
-        Optional<Quiz> quiz = quizRepository.findById(id);
-        return quiz.orElse(null);
-    }
-
-    @Override
     public Quiz saveQuiz(Quiz quiz) {
         return quizRepository.save(quiz);
     }
@@ -58,5 +52,19 @@ public class QuizServiceImplementation implements QuizService {
     public long count() {
         return quizRepository.count();
     }
+
+    @Override
+    public List<Quiz> findAll() {
+        return quizRepository.findAll();
+    }
+
+
+    @Override
+    public Quiz getQuizById(Long id) {
+        return quizRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Quiz not found"));
+    }
+
+
 }
 

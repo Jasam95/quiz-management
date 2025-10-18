@@ -1,27 +1,20 @@
-package com.example.quiz_management.entity;
+package com.example.quiz_management.dto;
 
-import jakarta.persistence.*;
+import com.example.quiz_management.entity.Question;
+import com.example.quiz_management.entity.User;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Entity
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-
-public class Quiz {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+public class QuizDto {
     @NotBlank(message = "Quiz title cannot be empty")
     private String title;
 
@@ -52,4 +45,3 @@ public class Quiz {
     @OneToMany(mappedBy = "quiz", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Question> questions;
 }
-

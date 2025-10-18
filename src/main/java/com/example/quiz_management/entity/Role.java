@@ -18,7 +18,7 @@ import java.util.Set;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
+
 public class Role {
 
     @Id
@@ -30,5 +30,10 @@ public class Role {
 
     @ManyToMany(mappedBy = "roles")
     private List<User> users = new ArrayList<>();
+
+    public Role(Long id, String name) {
+        this.id = id;
+        this.name = name;
+    }
 }
 

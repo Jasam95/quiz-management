@@ -22,8 +22,7 @@ public class QuestionController {
 
     private QuestionService questionService;
     private final QuizRepository quizRepository;
-    private final QuestionRepository questionRepository;
-    private final ChoiceRepository choiceRepository;
+
 
 
     @GetMapping("/admin/questions")

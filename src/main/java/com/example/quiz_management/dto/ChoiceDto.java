@@ -1,22 +1,12 @@
-package com.example.quiz_management.entity;
+package com.example.quiz_management.dto;
 
-
-
-import jakarta.persistence.*;
+import com.example.quiz_management.entity.Question;
+import jakarta.persistence.Column;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.NotNull;
-import lombok.*;
 
-@Entity
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@Table(name = "choices")
-public class Choice {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class ChoiceDto {
 
     @NotNull(message = "Option must be entered")
     @Column(nullable = false, length = 1000)
