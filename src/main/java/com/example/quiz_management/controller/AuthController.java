@@ -52,7 +52,7 @@ public class AuthController {
             return "register";
         }
         try {
-            String roles = "ROLE_ADMIN";
+            String roles = "ROLE_PARTICIPANT";
             userLogInService.createUser(userDto ,roles);
             redirectAttrs.addFlashAttribute("registered", true);
         } catch (IllegalArgumentException ex) {
