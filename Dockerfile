@@ -19,7 +19,7 @@ FROM openjdk:21-jdk-slim
 WORKDIR /app
 
 # Copy the jar built in the previous stage
-COPY --from=build /app/target/demo-spring-thymeleaf-login-0.0.1-SNAPSHOT.jar app.jar
+COPY --from=build /app/target/quiz-management-0.0.1-SNAPSHOT.jar app.jar
 
 EXPOSE 8080
 
