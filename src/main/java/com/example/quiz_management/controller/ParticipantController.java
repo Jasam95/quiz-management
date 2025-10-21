@@ -1,6 +1,5 @@
 package com.example.quiz_management.controller;
 
-import com.example.quiz_management.entity.Quiz;
 import com.example.quiz_management.entity.QuizAttempt;
 import com.example.quiz_management.entity.User;
 import com.example.quiz_management.service.QuizAttemptService;
@@ -14,7 +13,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.List;
 import java.util.Map;
 
 @Controller

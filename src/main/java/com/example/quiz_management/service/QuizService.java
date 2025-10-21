@@ -8,8 +8,8 @@ public interface QuizService {
     List<Quiz> getAllQuizzes();
 
     Quiz getQuizById(Long id);
-    Quiz saveQuiz(Quiz quiz);
-    Quiz updateQuiz(Long id, Quiz updatedQuiz);
+    void saveQuiz(Quiz quiz);
+    void updateQuiz(Long id, Quiz updatedQuiz);
     void deleteQuiz(Long id);
 
     long count();

@@ -10,7 +10,6 @@ public class ChoiceDto {
 
     @NotNull(message = "Option must be entered")
     @Column(nullable = false, length = 1000)
-
     private String text;
 
     @Column(name = "is_correct")
