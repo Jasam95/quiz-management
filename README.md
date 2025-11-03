@@ -69,6 +69,11 @@ spring.datasource.username=root
 
 spring.datasource.password=VyFkMJCPSkPuKtsRLQarIuamBGpnnbIM
 
+
+
+**Deployes Railway Url:** quiz-management-production.up.railway.app
+
+
 Swaggers main End Point:
 
 | Endpoint         | Method | Description          |
