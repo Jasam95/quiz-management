@@ -23,7 +23,10 @@ public class SecurityConfig {
 
                         // Public pages
                         .requestMatchers("/", "/index", "/register", "/register/**",
-                                "/static/**", "/css/**", "/js/**", "/images/**", "/posters/**").permitAll()
+                                "/static/**", "/css/**", "/js/**", "/images/**", "/posters/**",
+                                "/swagger-ui/**",
+                                "/v3/api-docs/**",
+                                "/api/**").permitAll()
 
                         // Only USER can book tickets
                         .requestMatchers("/participants/**").hasRole("PARTICIPANT")

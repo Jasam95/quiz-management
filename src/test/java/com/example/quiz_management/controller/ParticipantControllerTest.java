@@ -78,82 +78,98 @@ public class ParticipantControllerTest {
     }
 
     // Test 1: Display all quizzes
+
+
     @Test
     void showAllQuizzes_shouldAddQuizzesToModelAndReturnView() {
-        List<Quiz> quizzes = List.of(quiz);
-        when(quizRepository.findAll()).thenReturn(quizzes);
+        Quiz quiz = new Quiz();
+        quiz.setId(1L);
+        quiz.setTitle("Java Basics");
 
-        String viewName = participantController.showAllQuizzes(model);
+        when(quizService.findAll()).thenReturn(List.of(quiz));
 
-        verify(model).addAttribute("quizzes", quizzes);
-        assertThat(viewName).isEqualTo("participant/quizzes");
+        String view = participantController.showAllQuizzes(model);
+
+        verify(model).addAttribute("quizzes", List.of(quiz));
+        assertThat(view).isEqualTo("participant/quizzes");
     }
 
     //  Test 2: Attempt quiz (new attempt)
     @Test
     void attemptQuiz_shouldCreateNewAttemptWhenNoneExists() {
-        when(userDetails.getUsername()).thenReturn("alice@example.com");
-        when(userLoginService.findByEmail(anyString())).thenReturn(participant);
-        when(quizRepository.findById(anyLong())).thenReturn(Optional.of(quiz));
-        when(quizAttemptRepository.findByQuizAndParticipantAndStatus(any(), any(), eq("IN_PROGRESS")))
-                .thenReturn(Optional.empty());
-
-        String viewName = participantController.attemptQuiz(1L, model, userDetails);
-
-        verify(quizAttemptRepository).save(any(QuizAttempt.class));
-        verify(model).addAttribute(eq("quiz"), any(Quiz.class));
-        verify(model).addAttribute(eq("attempt"), any(QuizAttempt.class));
-        assertThat(viewName).isEqualTo("participant/quiz_attempt");
-    }
-
-    //  Test 3: Submit quiz
-    @Test
-    void submitQuiz_shouldSaveAttemptAndRedirectToResult() {
-        // Mock user details
+        // Arrange
         when(userDetails.getUsername()).thenReturn("alice@example.com");
         when(userLoginService.findByEmail("alice@example.com")).thenReturn(participant);
 
-        // Create a choice
+        quiz.setId(1L);
+        quiz.setTitle("Java Basics");
+        quiz.setDurationInMinutes(30);
+
+        QuizAttempt attempt = new QuizAttempt();
+        attempt.setId(1L);
+        attempt.setQuiz(quiz);
+        attempt.setParticipant(participant);
+
+        when(quizAttemptService.startOrResumeAttempt(1L, participant)).thenReturn(attempt);
+
+        // Act
+        String view = participantController.attemptQuiz(1L, model, userDetails);
+
+        // Assert
+        verify(model).addAttribute("quiz", quiz);
+        verify(model).addAttribute("attempt", attempt);
+        verify(model).addAttribute("durationSeconds", 30 * 60);
+        assertThat(view).isEqualTo("participant/quiz_attempt");
+    }
+
+    @Test
+    void submitQuiz_shouldSaveAttemptAndRedirectToResult() {
+        // Mock logged-in user
+        when(userDetails.getUsername()).thenReturn("alice@example.com");
+        when(userLoginService.findByEmail("alice@example.com")).thenReturn(participant);
+
+        // Create quiz and mock data
         Choice choice = new Choice();
         choice.setId(1L);
         choice.setText("Java Virtual Machine");
         choice.setIsCorrect(true);
 
-        // Create a question
         Question question = new Question();
         question.setId(1L);
         question.setQuestionText("What is JVM?");
         question.setPoints(1.0);
         question.setChoices(List.of(choice));
 
-        // Create a quiz with that question
         quiz.setQuestions(List.of(question));
 
-        // Mock service behavior
-        when(quizService.getQuizById(1L)).thenReturn(quiz);
-
         QuizAttempt attempt = new QuizAttempt();
+        attempt.setId(1L);
         attempt.setQuiz(quiz);
         attempt.setParticipant(participant);
-        attempt.setStatus("IN_PROGRESS");
-        attempt.setStartedAt(LocalDateTime.now());
-        attempt.setUserAnswers(new ArrayList<>());
+        attempt.setTotalScore(1.0);
+        attempt.setStatus("COMPLETED");
 
-        when(quizAttemptRepository.findByQuizAndParticipantAndStatus(quiz, participant, "IN_PROGRESS"))
-                .thenReturn(Optional.of(attempt));
+        // ✅ Mock the submitAttempt call (this is what the controller calls)
+        when(quizAttemptService.submitAttempt(eq(1L), eq(participant), anyMap()))
+                .thenReturn(attempt);
 
-        Map<String, String> params = new HashMap<>();
-        params.put("selectedChoiceId_1", "1");
+        // Mock parameters for form submission
+        Map<String, String> params = Map.of("selectedChoiceId_1", "1");
 
-        String result = participantController.submitQuiz(
-                1L, params, userDetails, redirectAttributes);
+        // Execute
+        String viewName = participantController.submitQuiz(1L, params, userDetails, redirectAttributes);
 
-        verify(quizAttemptRepository).save(any(QuizAttempt.class));
-        verify(redirectAttributes).addFlashAttribute(eq("score"), anyDouble());
-        assertThat(result).isEqualTo("redirect:/participant/quiz_result");
+        // ✅ Verify the correct behavior
+        verify(userLoginService).findByEmail("alice@example.com");
+        verify(quizAttemptService).submitAttempt(eq(1L), eq(participant), anyMap());
+        verify(redirectAttributes).addFlashAttribute("score", 1.0);
+        verify(redirectAttributes).addFlashAttribute("quiz", quiz);
+        verify(redirectAttributes).addFlashAttribute("attempt", attempt);
+
+        // ✅ Check redirect
+        assertThat(viewName).isEqualTo("redirect:/participant/quiz_result");
     }
 
-    // Test 4: Show result page
     @Test
     void showQuizResult_shouldReturnResultView() {
         String viewName = participantController.showQuizResult();
