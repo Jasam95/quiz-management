@@ -68,7 +68,7 @@ public class AuthController {
         List<Quiz> quizzes = quizRepository.findAll();
         model.addAttribute("quizzes", quizzes);
         model.addAttribute("message", "Welcome to Participant Quiz page!");
-        return "/participant/quizzes"; // Thymeleaf template: user.html
+        return "participant/quizzes"; // Thymeleaf template: user.html
     }
 
     @GetMapping("/profile")
