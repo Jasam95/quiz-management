@@ -8,7 +8,7 @@ RUN mvn dependency:go-offline -B
 COPY src ./src
 RUN mvn clean package -DskipTests
 
-# Run stage (use JRE, memory efficient)
+# Run stage (JRE is lighter than JDK)
 FROM eclipse-temurin:21-jre
 WORKDIR /app
 
@@ -16,12 +16,4 @@ COPY --from=build /app/target/*.jar app.jar
 
 EXPOSE 8080
 
-CMD ["java",
-     "-Xmx192m",
-     "-Xms128m",
-     "-XX:MaxMetaspaceSize=96m",
-     "-XX:ReservedCodeCacheSize=32m",
-     "-XX:MaxDirectMemorySize=32m",
-     "-XX:MaxRAMPercentage=70",
-     "-jar",
-     "app.jar"]
+CMD ["java", "-Xmx192m", "-Xms128m", "-XX:MaxMetaspaceSize=96m", "-XX:ReservedCodeCacheSize=32m", "-XX:MaxDirectMemorySize=32m", "-XX:MaxRAMPercentage=70", "-jar", "app.jar"]
