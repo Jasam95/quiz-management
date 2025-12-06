@@ -1,27 +1,27 @@
-# Use Maven with OpenJDK to build the project
+# Build stage
 FROM maven:3.9.6-eclipse-temurin-21 AS build
-
 WORKDIR /app
 
-# Copy the pom.xml first and download dependencies
 COPY pom.xml .
 RUN mvn dependency:go-offline -B
 
-# Copy the rest of the source code
 COPY src ./src
-
-# Build the jar file
 RUN mvn clean package -DskipTests
 
-# Use a smaller JDK image to run the app
+# Run stage (use JRE, memory efficient)
 FROM eclipse-temurin:21-jre
-
 WORKDIR /app
 
-# Copy the jar built in the previous stage
-COPY --from=build /app/target/quiz-management-0.0.1-SNAPSHOT.jar app.jar
+COPY --from=build /app/target/*.jar app.jar
 
 EXPOSE 8080
 
-# CMD ["java", "-jar", "app.jar"]
-CMD ["java", "-Xmx256m", "-Xms128m", "-jar", "app.jar"]
+CMD ["java",
+     "-Xmx192m",
+     "-Xms128m",
+     "-XX:MaxMetaspaceSize=96m",
+     "-XX:ReservedCodeCacheSize=32m",
+     "-XX:MaxDirectMemorySize=32m",
+     "-XX:MaxRAMPercentage=70",
+     "-jar",
+     "app.jar"]
